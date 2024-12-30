@@ -1,5 +1,5 @@
 <div class="grid grid-cols-1 px-6 max-w-2xl mx-auto" id="cart_items" phx-update="stream">
-  <h1 class="text-4xl pb-12 font-semibold">Your Cart</h1>
+  <h1 class="text-4xl pb-12 font-semibold">Your Cart has <%= Enum.count(@streams.cart_items) %> items </h1>
   <div
     :for={{dom_id, cart_item} <- @streams.cart_items}
     id={dom_id}
@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <.button phx-click="checkout">
+  <.button phx-click="checkout" class="focus:outline-none focus:shadow-outline text-sm bg-cyan-800 hover:opacity-70 hover:bg-cyan-800 text-white py-2 px-4 mt-2 rounded">
     Checkout
   </.button>
 </div>

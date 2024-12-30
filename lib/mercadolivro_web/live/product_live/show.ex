@@ -4,7 +4,15 @@ defmodule MercadolivroWeb.ProductLive.Show do
   alias Mercadolivro.Store
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    {:ok, socket}
+
+    cart_items = Store.list_cart_items(session["cart_id"])
+
+    socket =
+      socket
+      |> stream(:cart_items, cart_items)
+
     {:ok, socket}
   end
 
@@ -14,6 +22,7 @@ defmodule MercadolivroWeb.ProductLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:product, Store.get_product!(id))}
+
   end
 
   defp page_title(:show), do: "Show Product"

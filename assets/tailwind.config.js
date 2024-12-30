@@ -14,11 +14,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: "#0E2F4E",
-        secondary: "#32474C",
+        brand: "#2b6777",
+        secondary: "#c8d8e4",
+        light: "#f2f2f2",
+        accent: "#52ab98",
+        white: "#FFF",
       },
       fontFamily: {
-        script: ["Oleo Script Swash Caps", "serif"],
+        script: ["Patua One", "serif"],
         montserrat: ["Montserrat", "serif"],
       },
     },

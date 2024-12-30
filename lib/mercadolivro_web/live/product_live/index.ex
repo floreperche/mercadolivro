@@ -7,10 +7,13 @@ defmodule MercadolivroWeb.ProductLive.Index do
   @impl true
   def mount(_params, session, socket) do
     if connected?(socket), do: Store.subscribe_to_product_events()
+    cart_items = Store.list_cart_items(session["cart_id"])
+
     socket =
       socket
       |> assign(:cart_id, session["cart_id"])
       |> stream(:products, Store.list_products())
+      |> stream(:cart_items, cart_items)
 
     {:ok, socket}
   end

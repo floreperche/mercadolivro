@@ -2,7 +2,7 @@
   All Products
   <:actions>
     <.link patch={~p"/products/new"}>
-      <.button class="bg-brand">New Product</.button>
+      <.button class="bg-transparent hover:bg-brand text-cyan-700 font-semibold hover:text-white py-2 px-4 border border-brand hover:border-transparent rounded">New Product</.button>
     </.link>
   </:actions>
 </.header>
@@ -38,7 +38,7 @@
         <button
           phx-click="add_to_cart"
           phx-value-id={product.id}
-          class="focus:outline-none focus:shadow-outline text-sm bg-secondary hover:bg-blue-600 text-white py-2 px-4 mt-2 rounded"
+          class="focus:outline-none focus:shadow-outline text-sm bg-accent hover:opacity-70 text-white py-2 px-4 mt-2 rounded"
         >
           Add to Cart
         </button>
