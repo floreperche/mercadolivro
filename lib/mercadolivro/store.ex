@@ -207,4 +207,23 @@ defmodule Mercadolivro.Store do
       on_conflict: [inc: [quantity: 1]]
     )
   end
+
+  alias Mercadolivro.Store.Order
+
+  @doc """
+  Create an order and complete a cart.
+
+  ## Examples
+
+      iex> crate_order(1)
+      {:ok, %Order{}}
+  """
+  def create_order(cart_id) do
+    cart_id
+    |> get_cart()
+    |> Cart.changeset(%{status: :completed})
+    |> Repo.update()
+
+    Repo.insert(%Order{cart_id: cart_id})
+  end
 end
