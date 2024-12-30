@@ -35,3 +35,5 @@ mercadolivro-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Ignore development secrets
+/config/dev.secret.exs
