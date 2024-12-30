@@ -6,6 +6,7 @@ defmodule MercadolivroWeb.ProductLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Store.subscribe_to_product_events()
     {:ok, stream(socket, :products, Store.list_products())}
   end
 
@@ -35,6 +36,16 @@ defmodule MercadolivroWeb.ProductLive.Index do
   @impl true
   def handle_info({MercadolivroWeb.ProductLive.FormComponent, {:saved, product}}, socket) do
     {:noreply, stream_insert(socket, :products, product)}
+  end
+
+  @impl true
+  def handle_info({:product_updated, updated_product}, socket) do
+    {:noreply, stream_insert(socket, :products, updated_product)}
+  end
+
+  @impl true
+  def handle_info({:product_created, created_product}, socket) do
+    {:noreply, stream_insert(socket, :products, created_product)}
   end
 
   @impl true

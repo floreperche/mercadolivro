@@ -50,9 +50,19 @@ defmodule Mercadolivro.Store do
 
   """
   def create_product(attrs \\ %{}) do
-    %Product{}
-    |> Product.changeset(attrs)
-    |> Repo.insert()
+    result =
+      %Product{}
+      |> Product.changeset(attrs)
+      |> Repo.insert()
+
+    case result do
+      {:ok, new_product} ->
+        broadcast_product_event(:product_created, new_product)
+        {:ok, new_product}
+
+      error ->
+        error
+    end
   end
 
   @doc """
@@ -68,9 +78,19 @@ defmodule Mercadolivro.Store do
 
   """
   def update_product(%Product{} = product, attrs) do
-    product
-    |> Product.changeset(attrs)
-    |> Repo.update()
+    result =
+      product
+      |> Product.changeset(attrs)
+      |> Repo.update()
+
+    case result do
+      {:ok, updated_product} ->
+        broadcast_product_event(:product_updated, updated_product)
+        {:ok, updated_product}
+
+      error ->
+        error
+    end
   end
 
   @doc """
@@ -100,5 +120,31 @@ defmodule Mercadolivro.Store do
   """
   def change_product(%Product{} = product, attrs \\ %{}) do
     Product.changeset(product, attrs)
+  end
+
+  @doc """
+  Subscribes you to product events.
+
+  ## Examples
+
+      iex> subscribe_to_product_events()
+      :ok
+
+  """
+  def subscribe_to_product_events do
+    Phoenix.PubSub.subscribe(Mercadolivro.PubSub, "products")
+  end
+
+  @doc """
+  Broadcast a product event.
+
+  ## Examples
+
+      iex> broadcast_product_event(:product_updated, %Stripe.Product{})
+      :ok
+
+  """
+  def broadcast_product_event(event, product) do
+    Phoenix.PubSub.broadcast(Mercadolivro.PubSub, "products", {event, product})
   end
 end
