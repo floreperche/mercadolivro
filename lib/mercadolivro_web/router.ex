@@ -8,6 +8,7 @@ defmodule MercadolivroWeb.Router do
     plug :put_root_layout, html: {MercadolivroWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug MercadolivroWeb.Plugs.SessionCart
   end
 
   pipeline :api do
@@ -25,6 +26,9 @@ defmodule MercadolivroWeb.Router do
 
     live "/products/:id", ProductLive.Show, :show
     live "/products/:id/show/edit", ProductLive.Show, :edit
+
+    live "/cart", CartLive.Show, :index
+    live "/cart/success", CartLive.Success, :index
   end
 
   # Other scopes may use custom stacks.
