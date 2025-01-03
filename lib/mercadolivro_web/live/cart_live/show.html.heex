@@ -3,20 +3,30 @@
   <div
     :for={{dom_id, cart_item} <- @streams.cart_items}
     id={dom_id}
-    class="cursor-pointer grid grid-cols-[8rem_1fr_auto] items-center border-b"
-    phx-click={JS.navigate(~p"/products/#{cart_item.product}")}
+    id="cart_items"
+  phx-update="stream"
+    class="grid grid-cols-[8rem_1fr_auto] items-center border-b"
   >
     <img
-      class="p-6 object-contain"
+      class="cursor-pointer p-6 object-contain"
       src={cart_item.product.thumbnail}
       title={cart_item.product.name}
       alt={cart_item.product.name}
+      phx-click={JS.navigate(~p"/products/#{cart_item.product}")}
     />
-    <div>
-      <%= cart_item.product.name %>
-    </div>
-    <div>
-      <%= Money.new(cart_item.product.amount * cart_item.quantity) %>
+
+ 
+      <p class="font-semibold cursor-pointer"   phx-click={JS.navigate(~p"/products/#{cart_item.product}")}><%= cart_item.product.name %></p>
+
+
+    <div class="flex flex-col items-center gap-2">
+      <div class="flex justify-between">
+        <p class="cursor-pointer bg-light px-1.5 rounded-md" phx-click="remove_item" phx-value-id={cart_item.product.id}>-</p>
+        <p class="px-2">{cart_item.quantity}</p>
+        <p class="cursor-pointer bg-light px-1.5 rounded-md" phx-click="add_item" phx-value-id={cart_item.product.id}>+</p>
+      </div>
+      <p><%= Money.new(cart_item.product.amount * cart_item.quantity) %></p>
+
     </div>
   </div>
 

@@ -229,7 +229,30 @@ defmodule Mercadolivro.Store do
     )
   end
 
+
+    @doc """
+  Remove a product to a cart. Decrements quantity on conflict.
+
+  ## Examples
+
+      iex> remove_item_to_cart(1, %Product{})
+      {:ok, %Product{}}
+  """
+  def remove_item_to_cart(cart_id, product) do
+    cart_item = Repo.get_by(CartItem, cart_id: cart_id, product_id: product.id)
+
+    case cart_item do
+      %{quantity: 1} ->
+        Repo.delete(cart_item)
+      cart_item ->
+        cart_item
+        |> Ecto.Changeset.change(quantity: cart_item.quantity - 1)
+        |> Repo.update()
+    end
+  end
+
   alias Mercadolivro.Store.Order
+
 
   @doc """
   Create an order and complete a cart.
