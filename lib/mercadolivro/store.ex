@@ -21,6 +21,27 @@ defmodule Mercadolivro.Store do
     Repo.all(Product)
   end
 
+    @doc """
+  Returns the list of products filtered by genre.
+
+  ## Examples
+
+      iex> list_products("Fiction")
+      [%Product{}, ...]
+
+  """
+  def list_products(filters) do
+    Product
+    |> filter_by_genre(filters[:genre])
+    |> Repo.all()
+  end
+
+  defp filter_by_genre(query, nil), do: query
+  defp filter_by_genre(query, ""), do: query
+  defp filter_by_genre(query, genre) do
+    where(query, [p], p.genre == ^genre)
+  end
+
   @doc """
   Gets a single product.
 

@@ -8,6 +8,7 @@ defmodule Mercadolivro.Store.Product do
     field :amount, :integer
     field :stock, :integer
     field :thumbnail, :string
+    field :genre, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -15,7 +16,7 @@ defmodule Mercadolivro.Store.Product do
   @doc false
   def changeset(product, attrs) do
     product
-    |> cast(attrs, [:amount, :description, :name, :stock, :thumbnail])
+    |> cast(attrs, [:amount, :description, :name, :stock, :thumbnail, :genre])
     |> validate_required([:amount, :description, :name, :stock, :thumbnail])
   end
 end

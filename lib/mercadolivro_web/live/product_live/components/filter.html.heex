@@ -1,0 +1,6 @@
+<div class="flex justify-center items-center">
+    <h4>Filter the results:</h4>
+    <p :for={genre <- @genres} class={"cursor-pointer inline bg-light px-2.5 py-0.5 rounded mx-2 #{if( @selected_genre === genre, do: "bg-brand text-white")}"} phx-click="select-genre" phx-value-genre={genre}>{genre}</p>
+    <p class={"inline mx-2 cursor-pointer border border-red-500 bg-red-100 text-red-500 px-2.5 py-0.3 rounded #{if( @selected_genre === "", do: "opacity-0 pointer-events-none")}"} phx-click="clear-genre">X</p>
+</div>
+

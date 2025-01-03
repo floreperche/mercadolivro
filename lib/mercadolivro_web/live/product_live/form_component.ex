@@ -2,6 +2,7 @@ defmodule MercadolivroWeb.ProductLive.FormComponent do
   use MercadolivroWeb, :live_component
 
   alias Mercadolivro.Store
+  alias Mercadolivro.Constants
 
   @impl true
   def render(assigns) do
@@ -24,6 +25,7 @@ defmodule MercadolivroWeb.ProductLive.FormComponent do
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:stock]} type="number" label="Stock" />
         <.input field={@form[:thumbnail]} type="text" label="Thumbnail" />
+        <.input field={@form[:genre]} type="select" label="Genre" options={Constants.product_genres()}/>
         <:actions>
           <.button phx-disable-with="Saving...">Save Product</.button>
         </:actions>

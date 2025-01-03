@@ -3,6 +3,9 @@ defmodule MercadolivroWeb.ProductLive.Index do
 
   alias Mercadolivro.Store
   alias Mercadolivro.Store.Product
+  alias Mercadolivro.Constants
+
+    embed_templates "components/*"
 
   @impl true
   def mount(_params, session, socket) do
@@ -12,6 +15,9 @@ defmodule MercadolivroWeb.ProductLive.Index do
     socket =
       socket
       |> assign(:cart_id, session["cart_id"])
+      |> assign(:genres, Constants.product_genres())
+      |> assign(:empty_list, false)
+      |> assign(:selected_genre, "")
       |> stream(:products, Store.list_products())
       |> stream(:cart_items, cart_items)
 
@@ -78,5 +84,39 @@ defmodule MercadolivroWeb.ProductLive.Index do
     Process.send_after(self(), :clear_flash, 2500)
 
     {:noreply, socket |> put_flash(:info, "Added to cart")}
+  end
+
+  @impl true
+  def handle_event("select-genre", %{"genre" => genre}, socket) do
+    socket =
+    socket
+    |> assign(:selected_genre, genre)
+    |> stream(:products, [], reset: true)
+    |> stream(:products, Store.list_products(genre: genre))
+    # IO.inspect(Store.list_products(genre: genre) === [])
+    # IO.inspect(socket.assigns.streams.products.inserts)
+
+    cond do
+      (socket.assigns.streams.products.inserts) === [] ->
+        IO.inspect("empty")
+        socket = assign(socket, empty_list: true)
+        {:noreply, socket}
+      true ->
+        IO.inspect("not empty")
+        socket = assign(socket, empty_list: false)
+        {:noreply, socket}
+    end
+
+  end
+
+  @impl true
+  def handle_event("clear-genre", _, socket) do
+    socket =
+    socket
+    |> assign(:selected_genre, "")
+    |> assign(:empty_list, false)
+    |> stream(:products, [], reset: true)
+    |> stream(:products, Store.list_products())
+  {:noreply, socket}
   end
 end
